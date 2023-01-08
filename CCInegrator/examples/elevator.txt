@@ -1,0 +1,6 @@
+.\examples\Elevator-Antenna-v1.4\Enterprise
+.\examples\Elevator-Antenna-v1.4\HomeBasic
+.\examples\Elevator-Antenna-v1.4\HomePremium
+.\examples\Elevator-Antenna-v1.4\Professional
+.\examples\Elevator-Antenna-v1.4\Starter
+.\examples\Elevator-Antenna-v1.4\Ultimate
