@@ -23,7 +23,8 @@ public class ActiveFileFinder {
 			for(int i=0; i<main_classes.size(); i++) {
 				System.out.println(i+1 + ") " + main_classes.get(i).getPath());
 			}
-			System.out.print("Please choose the number to be a start point: ");
+			System.out.println("Please choose the number to be a start point.");
+			System.out.print("$ ");
 			while(choice<1 || choice>main_classes.size()) {
 				choice = new Scanner(System.in).nextInt();
 			}

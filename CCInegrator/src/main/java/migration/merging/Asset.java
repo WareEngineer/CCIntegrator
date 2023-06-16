@@ -8,6 +8,7 @@ import migration.clustering.Chain;
 import migration.clustering.CloneSet;
 import migration.merging.entity.AnnotatedCode;
 import migration.merging.merger.CodeMerger;
+import migration.merging.merger.SimpleCodeMerger;
 
 public class Asset {
 	private static int k = 0;
@@ -38,7 +39,8 @@ public class Asset {
 	
 	private String getCode(CloneSet cluster) {
 		String comment = CodeMerger.makeDescription(cluster);
-		AnnotatedCode annotatedCode = CodeMerger.merge(cluster);
+//		AnnotatedCode annotatedCode = CodeMerger.merge(cluster);
+		AnnotatedCode annotatedCode = SimpleCodeMerger.merge(cluster);
 		String[] lines = annotatedCode.toString().split("\n");
 		LinkedList<String> list = new LinkedList<String>();
 		for(String line : lines) {

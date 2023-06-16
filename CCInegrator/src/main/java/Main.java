@@ -1,8 +1,9 @@
-
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 
+import analyzer.Analyzer;
+import generation.Generator;
 import migration.CCIntegrator;
 
 public class Main {
@@ -15,10 +16,11 @@ public class Main {
 		
 		int choice;
 		do {
-			System.out.println("= MENU ============================================");
+			System.out.println("= MENU =================================================");
 			System.out.println("1. Migrating from CAO based products to SPL repository.");
-			System.out.println("2. EXIT");
-			System.out.println("===================================================");
+			System.out.println("2. Generating products from migrated SPL repository.");
+			System.out.println("3. EXIT");
+			System.out.println("========================================================");
 			do {
 				System.out.print("$ ");
 				choice = new Scanner(System.in).nextInt();
@@ -33,6 +35,11 @@ public class Main {
 				cci.formatCodingStyle(true);	// Step 2.1
 				cci.clustering();				// Step 2.2
 				cci.merging();					// Step 3.1 & 3.2
+				cci.buildingModel();			// Step 4.1
+				Analyzer.analyzeAssetRepository();
+			} else if(choice == 2) {
+				Generator.setConfiguration();
+				Generator.generateProduct();
 			} else {
 				break;
 			}

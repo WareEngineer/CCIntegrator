@@ -13,28 +13,33 @@ import preprocess.decomposing.JavaCodeDecomposer;
 
 public class Preprocessor {
 	private List<String> roots = new LinkedList<String>();
-	private final String example 
-	    = "\n===<file name>=================================="
-		+ "\nproducts.txt"
-		+ "\n===<file text>=================================="
-		+ "\nC:\\[your_directory_path]\\[root_of_1th_product]"
-		+ "\nC:\\[your_directory_path]\\[root_of_2th_product]"
-		+ "\n..."
-		+ "\nC:\\[your_directory_path]\\[root_of_nth_product]"
-		+ "\n================================================"
-		+ "\nEnter the file-path: C:\\...\\products.txt"
-		+ "\n"
-		+ "\nTo apply CCIntegrator to your own product variants developed with Clone-and-Own approach,"
-		+ "\n   you create a text file recording paths of products and enter the path of the text file as above."
-		+ "\nWe offer two simple examples referring to the Antenna-based FeatureIDE examples."
-		+ "\n   1) .\\examples\\elevator.txt"
-		+ "\n   2) .\\examples\\hello_world.txt";
+	private final String example =
+//    "\n===<file name>=========================================="
+//	+ "\nproducts.txt"
+//	+ "\n===<file text>=========================================="
+//	+ "\nC:\\[your_directory_path]\\[root_of_1th_product_variant]"
+//	+ "\nC:\\[your_directory_path]\\[root_of_2th_product_variant]"
+//	+ "\n..."
+//	+ "\nC:\\[your_directory_path]\\[root_of_nth_product_variant]"
+//	+ "\n========================================================"
+//	+ "\nEnter a text file's path."
+//	+ "\n$ C:\\...\\products.txt"
+//	+ "\n"
+	  "\nTo apply CCIntegrator to your own product variants developed with Clone-and-Own approach,"
+	+ "\n   you create a text file listing root-paths of product variants"
+	+ "\n   and enter the path of the text file as above."
+	+ "\n"
+	+ "\nWe offer four text files for simple examples."
+	+ "\n   1) .\\examples\\elevator.txt"
+	+ "\n   2) .\\examples\\helloWorld.txt"
+	+ "\n   3) .\\examples\\apoGames.txt"
+	+ "\n   4) .\\examples\\argoUML.txt";
 	
 	@SuppressWarnings("resource")
 	public void loadProducts() {
 		System.out.println(example);
 		System.out.println();
-		System.out.println("Enter the file-path that is recored the products' root-path like the avobe example.");
+		System.out.println("Enter a text file's path.");
 		String path;
 		while(true) {
 			System.out.print("$ ");
@@ -42,6 +47,7 @@ public class Preprocessor {
 			if(new File(path).exists()) break;
 		}
 		String text = MyFileReader.read(path);
+		System.out.println();
 		System.out.println("Loading products' files ...");
 		int total = 0;
 		for(String productPath : text.split("\n")) {

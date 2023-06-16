@@ -24,14 +24,22 @@ public class AnnotatedCode {
 	}
 	
 	public void append(Map<String, String> map) {
-		String[] ids = new String[map.keySet().size()];
-		String[][] codes = new String[map.keySet().size()][];
-		int count = 0;
+		List<TaggedLines> list = new LinkedList<TaggedLines>();
 		for(String id : map.keySet()) {
 			String code = map.get(id);
-			ids[count] = id;
-			codes[count] = code.split("\n");
-			count++;
+			TaggedLines tc = new TaggedLines(id, code.split("\n"));
+			list.add(tc);
+		}
+		annotate(list);
+	}
+	
+	private void annotate(List<TaggedLines> list) {
+		String[] ids = new String[list.size()];
+		String[][] codes = new String[list.size()][];
+		for(int i=0; i<list.size(); i++) {
+			TaggedLines tc = list.get(i);
+			ids[i] = tc.getId();
+			codes[i] = tc.getCode();
 		}
 		
 		String[] commonLines = LCS.get(codes);
@@ -71,7 +79,7 @@ public class AnnotatedCode {
 			segments.add(vp);
 		}
 	}
-	
+
 	public List<VP> VP() {
 		List<VP> list= new LinkedList<VP>();
 		segments.forEach(e -> {

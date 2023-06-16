@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
+import io.MyFileCopier;
 import io.MyFileReader;
 import io.MyFileRemover;
 import io.MyFileWriter;
@@ -16,12 +17,22 @@ import migration.parsing.Product;
 
 public class SPLrepository {
 	public static final String ROOT = ".\\repository";
+	public static final String NON_SOURCECODE = ROOT + "\\non-sourcecode";
 	public static final String SOURCECODE = ROOT + "\\sourcecode";
+	public static final String MODEL = ROOT + "\\model.xml";
 	public static final String SUGGESTION = ROOT + "\\suggestion_for_refactoring.txt";
 	private List<Asset> assets = new LinkedList<Asset>();
 	
 	public SPLrepository(List<Product> products) {
 		MyFileRemover.remove(SPLrepository.ROOT);
+		for(Product product : products) {
+			String name = product.getName();
+			List<String> extensions = new LinkedList<String>();
+			extensions.add(".java");
+			String src = product.getRootPath();
+			String dest = NON_SOURCECODE + "\\" + name;
+			MyFileCopier.copyDiretoryExcept(src, dest, ".java");
+		}
 	}
 
 	public void addAsset(Asset asset) {
@@ -58,6 +69,10 @@ public class SPLrepository {
 	
 	public static String getAsset(String name) {
 		return MyFileReader.read(String.format("%s\\%s", SOURCECODE, name));
+	}
+
+	public static String getNonSourceCodeRepository(String productName) {
+		return String.format("%s\\%s", SPLrepository.NON_SOURCECODE, productName);
 	}
 	
 }

@@ -6,6 +6,8 @@ import java.util.Queue;
 import java.util.Scanner;
 import java.util.Set;
 
+import javax.xml.transform.TransformerException;
+
 import io.FileExplorer;
 import migration.clustering.CloneSet;
 import migration.clustering.classifier.Classifier;
@@ -16,7 +18,7 @@ import migration.filtering.Portfolio;
 import migration.fomatter.JavaCodeAnalyzer;
 import migration.fomatter.JavaCodeFormatter;
 import migration.merging.Asset;
-import migration.merging.RepositoryAnalyzer;
+import migration.merging.ProductVariantModel;
 import migration.merging.SPLrepository;
 import migration.merging.merger.CodeMerger;
 import migration.optimizing.ActiveFileFinder;
@@ -52,8 +54,9 @@ public class CCIntegrator {
 		System.out.println("   Total Files: " + total);
 	}
 	
+	@SuppressWarnings("resource")
 	public void deleteDeadCode() {
-		System.out.println("Deleting Dead Codes...");
+		System.out.println("\nDeleting dead files consisting of dead code from each product variant.");
 		int total = 0;
 		int remainder = 0;
 		int deletion = 0;
@@ -64,8 +67,10 @@ public class CCIntegrator {
 			System.out.println("=> All Files: " + p.sizeOfSourceFiles());
 			System.out.println("=> Dead Files: " + sizeOfDeadFiles);
 			System.out.println("=> Active Files: " + activeFiles.size());
+			remainder += activeFiles.size();
 			if(sizeOfDeadFiles == 0) continue;
 			System.out.println("Do you want to delete the UNREACHABLE_CLASSES? [y/n]");
+			System.out.print("$ ");
 			String answer = "";
 			while(!answer.equals("y") && !answer.equals("n")) {
 				answer = new Scanner(System.in).nextLine();
@@ -75,9 +80,11 @@ public class CCIntegrator {
 				remainder += p.sizeOfSourceFiles();
 				continue;
 			}
-			remainder += activeFiles.size();
-			p.deleteAllFilesExcept(activeFiles);
-			deletion += sizeOfDeadFiles;
+			if(sizeOfDeadFiles > 0) {
+				p.deleteAllFilesExcept(activeFiles);
+				deletion += sizeOfDeadFiles;
+			}
+			System.out.println();
 		}
 		System.out.println(String.format("=> Out of a total of %d files that make up the product family,", total));
 		System.out.println(String.format("   %d files were deleted because they were dead files.", deletion));
@@ -85,8 +92,9 @@ public class CCIntegrator {
 	}
 	
 	public void decidePortfolio() {
-		System.out.println("Deciding the scope of the migration...");
-		System.out.print("Please enter the threshold for clustering: ");
+		System.out.println("\nDeciding a scope of the product family.");
+		System.out.println("Please enter a threshold for excluding product variants with low functional-similarity from the product family.");
+		System.out.print("$ ");
 		double threshold = -1;
 		while(threshold<0 || threshold>1.0) {
 			threshold = new Scanner(System.in).nextDouble();
@@ -121,7 +129,7 @@ public class CCIntegrator {
 	
 	
 	public void formatCodingStyle(boolean isRearranged) {
-		System.out.println("Formmating code styles in all java files ...");
+		System.out.println("\nApplying single code style to every java file in the product family.");
 		List<Product> formattedProducts = new LinkedList<Product>();
 		System.out.println("=> BEFORE: The original codes");
 		System.out.println(JavaCodeAnalyzer.classifyLineByType(products));
@@ -141,8 +149,9 @@ public class CCIntegrator {
 	}
 	
 	public void clustering() {
-		System.out.println("Clustering Code...");
-		System.out.print("Please enter the threshold for clustering: ");
+		System.out.println("\nClustering cloned-codes generated during the creation of product variants.");
+		System.out.println("Please enter a threshold for clustering cloned-codes between product variants.");
+		System.out.print("$ ");
 		double threshold = -1;
 		while(threshold<0 || threshold>1.0) {
 			threshold = new Scanner(System.in).nextDouble();
@@ -165,7 +174,7 @@ public class CCIntegrator {
 	}
 	
 	public void merging() {
-		System.out.println("Merging Code...");
+		System.out.println("\nMerging cloned-codes into one by using annotations at the variation points.");
 		repository = new SPLrepository(products);
 		Collections.sort(clusters, (a,b) -> b.NOC()-a.NOC());
 		Queue<CloneSet> queue = new LinkedList<CloneSet>();
@@ -198,7 +207,21 @@ public class CCIntegrator {
 				repository.log(cluster);
 			}
 		}
-		RepositoryAnalyzer.analyze(products, repository);
 	}
 
+	public void buildingModel() {
+		ProductVariantModel model = new ProductVariantModel();
+		for(Product product : products) {
+			model.append(product);
+		}
+		for(Asset asset : repository.getAllAssets()) {
+			model.append(asset);
+		}
+		try {
+			model.create();
+		} catch (TransformerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 }

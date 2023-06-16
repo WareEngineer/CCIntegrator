@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Set;
 
 public class LCS {
-	
+
 	public static String[] get(String[][] codes) {
 		String[] common = getCommonLines(codes);
 		String[][] simples = excludeUncommonLines(codes, common);
@@ -43,7 +43,7 @@ public class LCS {
 		}
 		return common;
 	}
-	
+
 	private static String[][] excludeUncommonLines(String[][] codes, String[] common) {
 		Set<String> set = new HashSet<String>();
 		for(String line : common) set.add(line);

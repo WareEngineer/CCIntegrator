@@ -1,0 +1,10 @@
+.\examples\ArgoUML-TraditionalVariants\P01_AllDisabled.config
+.\examples\ArgoUML-TraditionalVariants\P02_AllEnabled.config
+.\examples\ArgoUML-TraditionalVariants\P03_LoggingDisabled.config
+.\examples\ArgoUML-TraditionalVariants\P04_CognitiveDisabled.config
+.\examples\ArgoUML-TraditionalVariants\P05_SequenceDiagramDisabled.config
+.\examples\ArgoUML-TraditionalVariants\P06_UseCaseDiagramDisabled.config
+.\examples\ArgoUML-TraditionalVariants\P07_DeploymentDiagramDisabled.config
+.\examples\ArgoUML-TraditionalVariants\P08_CollaborationDiagramDisabled.config
+.\examples\ArgoUML-TraditionalVariants\P09_StateDiagramDisabled.config
+.\examples\ArgoUML-TraditionalVariants\P10_ActivityDiagramDisabled.config
